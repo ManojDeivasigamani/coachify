@@ -1,5 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import { BadRequestError } from "../error-handlers/bad-request-error";
 import { User } from "../models/signup";
 
 const JWT_SECRET = "mySuperCoolSecretForJWT";
@@ -17,7 +18,11 @@ export const SignUpController = async (
   });
 
   if (existingUser) {
-    return next(new Error("User already exist in the system"));
+    return next(
+      new BadRequestError(
+        `User already available with the email: ${existingUser.Email}`
+      )
+    );
   }
 
   // 2. If the User doesn't exist, Create a new user
