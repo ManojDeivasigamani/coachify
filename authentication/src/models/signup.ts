@@ -8,6 +8,9 @@ interface UserAttributes {
   LastName: string;
   Email: string;
   Password: string;
+  EmailOTP: number;
+  OTPExpiresAt: Date;
+  isEmailVerified: Boolean;
 }
 
 // An interface that describes the properties that a User model has
@@ -23,6 +26,9 @@ interface UserDoc extends mongoose.Document {
   LastName: string;
   Email: string;
   Password: string;
+  EmailOTP: number;
+  OTPExpiresAt: Date;
+  isEmailVerified: Boolean;
 }
 
 const userSchema = new mongoose.Schema(
@@ -51,14 +57,25 @@ const userSchema = new mongoose.Schema(
       min: 8,
       max: 16,
     },
+    EmailOTP: {
+      type: Number,
+    },
+    OTPExpiresAt: {
+      type: Date,
+    },
+    isEmailVerified: {
+      type: Boolean,
+    },
   },
   {
     toJSON: {
       transform(doc, ret) {
         ret.id = ret._id;
         delete ret._id;
-        delete ret.password;
+        delete ret.Password;
         delete ret.__v;
+        delete ret.EmailOTP;
+        delete ret.OTPExpiresAt;
       },
     },
   }
